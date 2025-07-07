@@ -3,19 +3,24 @@ import axios from "axios";
 import Button from "./Button";
 
 interface Task {
-  id: number;
+  id: string;
   title: string;
 }
 
 const Tasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [errorMessage, setErrorMessage] = useState<null | string>(null);
 
   const handleClick = async () => {
-    const { data } = await axios.get(
-      "https://jsonplaceholder.typicode.com/todos?_limit=10"
-    );
-
-    setTasks(data);
+    try {
+      setErrorMessage(null);
+      const { data } = await axios.get(
+        "https://jsonplaceholder.typicode.com/todos?_limit=10"
+      );
+      setTasks(data);
+    } catch (error: any) {
+      setErrorMessage(error?.message || "An error occurred");
+    }
   };
 
   return (
@@ -25,9 +30,11 @@ const Tasks = () => {
         Get Tasks from API
       </Button>
 
-      {tasks.map((task) => (
-        <p id={task.id.toString()}>{task.title}</p>
-      ))}
+      {tasks.length > 0 &&
+        tasks.map((task) => <p key={task.id}>{task.title}</p>)}
+
+      {/* Adicione um elemento para a mensagem de erro com test-id */}
+      {errorMessage && <div data-testid="error-message">{errorMessage}</div>}
     </>
   );
 };

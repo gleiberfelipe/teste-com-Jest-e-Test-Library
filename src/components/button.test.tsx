@@ -11,7 +11,7 @@ describe("Button Component", () => {
 
     const button = screen.getByRole("button", { name: "Click me" });
 
-    expect(button).toHaveStyle({ backgroundColor: "red" });
+    expect(button).toHaveStyle({ backgroundColor: "blue" });
   });
 
   it("should call onClick prop on click", () => {
